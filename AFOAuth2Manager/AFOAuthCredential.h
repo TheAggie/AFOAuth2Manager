@@ -51,6 +51,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic, copy) NSString *refreshToken;
 
 /**
+ The expiration date
+ */
+@property (readonly, nonatomic, copy) NSDate *expiration;
+
+/**
  Whether the OAuth credentials are expired.
  */
 @property (readonly, nonatomic, assign, getter = isExpired) BOOL expired;
@@ -117,10 +122,17 @@ NS_ASSUME_NONNULL_BEGIN
  @param credential The OAuth credential to be stored.
  @param identifier The service identifier associated with the specified credential.
 
+ 
  @return Whether or not the credential was stored in the keychain.
  */
 + (BOOL)storeCredential:(AFOAuthCredential *)credential
          withIdentifier:(NSString *)identifier;
+
+
+
++ (BOOL)storeCredential:(AFOAuthCredential *)credential
+         withIdentifier:(NSString *)identifier
+              withGroup:(NSString*)group;
 
 /**
  Stores the specified OAuth token for a given web service identifier in the Keychain.
@@ -135,6 +147,12 @@ NS_ASSUME_NONNULL_BEGIN
          withIdentifier:(NSString *)identifier
       withAccessibility:(id)securityAccessibility;
 
+
++ (BOOL)storeCredential:(AFOAuthCredential *)credential
+         withIdentifier:(NSString *)identifier
+              withGroup:(NSString *)group
+      withAccessibility:(id)securityAccessibility;
+
 /**
  Retrieves the OAuth credential stored with the specified service identifier from the Keychain.
 
@@ -142,7 +160,18 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return The retrieved OAuth credential.
  */
+
 + (nullable AFOAuthCredential *)retrieveCredentialWithIdentifier:(NSString *)identifier;
+
+/**
+ Retrieves the OAuth credential stored with the specified service identifier from the Keychain.
+
+ @param identifier The service identifier associated with the specified credential.
+ @param group The service group.
+ 
+ @return The retrieved OAuth credential.
+ */
++ (nullable AFOAuthCredential *)retrieveCredentialWithIdentifier:(NSString *)identifier withGroup:(NSString *)group;
 
 /**
  Deletes the OAuth credential stored with the specified service identifier from the Keychain.
